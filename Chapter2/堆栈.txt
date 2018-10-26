@@ -1,0 +1,273 @@
+范例1：
+//=========================Program Description==================
+//程序名称：
+//程序目的：用数组模拟堆栈
+//=============================================================
+
+Import java.io.*;
+class StackByArray {   //以数组模拟堆栈的类声明
+private int[ ] stack;   //在类中声明数组
+private int[ ] top;    //指向堆栈顶端的索引
+// StackByArray类构造函数
+public StackByArray (intstack_size) {
+stack=new int[stack_size];   //建立数组
+top=-1;
+}
+//类方法：push
+//存放顶端数据，并更正新堆栈的内容
+public Boolean push(int data){
+if(top>=stack.length) {  //判断堆栈顶端的索引是否大于数组大小
+System.out.println(“堆栈已满，无法再加入”);
+return false;
+}
+else{
+stack[++top]=data;  将数据存入堆栈
+return true;
+}
+}
+//类方法：empty
+//判断堆栈是否为空堆栈，是则返回false，不是则返回false
+public Boolean empty(){
+if(top==1) return true;
+else return false;
+}
+//类方法：pop
+//从堆栈取出数据
+public int pop() {
+if(empty()) {  //判断堆栈是否为空，如果是返回-1值
+return -1；
+else
+return stack[top--]; //先将数据取出后，再将堆栈指针往下移
+}
+}
+//主类的声明
+public class CH04_01 {
+public static void main(String args[ ]) throws IOException {
+BufferedReaderbuf;
+int value;
+StackByArray  stack=new  StackByArray(10);
+buf=new BufferedReader(
+new InputStreamReader(system.in));
+System.out.println(“请依次输入10个数据:  ”);
+for(inti=0;i<10;i++) {
+value=Integer.parseInt(buf.readLine());
+stack.push(value);
+}
+System.out.println(“===========================”);
+while(!stack.empty())  /将堆栈数据陆续从顶端弹出
+System.out.println(“堆栈弹出的顺序为:”+stack.pop());
+}
+}
+
+范例2：
+//=========================Program Description==================
+//程序名称：
+//程序目的：堆栈应用-洗牌与发牌的过程
+           0~12  梅花
+           13~25 方块
+           26~38 红桃
+           39~51 黑桃
+//=============================================================
+
+import java.io.*;
+public class CH04_02
+{
+static int top=-1;
+public static void main(String args[ ]) throws IOException
+{
+int card[ ]=new int[52];
+int stack[ ]=new int[52];
+intI,j,k=0,test;
+char ascVal=’H’;
+int style;
+for(i=0;i<52;i++)
+card[i]=I;
+System.out.println(“[洗牌中…….请稍后!]”);
+while(k<30)
+{
+for(i=0;i<51;i++)
+{
+for(j=i+1;j<52;j++)
+{
+if(((int)(Math.random()*5))==2)
+{
+test=card[i];    //洗牌
+card[i]=card[j];
+card[j]=test;
+}
+}
+}
+k++;
+}
+i=0;
+while(i!=52)
+{
+push(stack,52,card[i]);    //将52张牌推入堆栈
+i++;
+}
+System.out.println(“[逆时针发牌]”);
+System.out.println(“[显示各家牌子] \n 东家\t 北家\t 西家\t  南家”);
+System.out.println(“========================================”)
+while(top>=0)
+{
+style=stack[top]/13;    //计算牌的花色
+switch(style)          //牌的花色图示对应
+{
+case=0;              //梅花
+ascVal=’C’;
+break;
+case=1;             //方块
+ascVal=’D’;
+break;
+case=2;              //红桃
+ascVal=’H’;
+break;
+case=3;              //黑桃
+ascVal=’S’;
+break;
+}
+System.out.println(“+ ascVal+(stack[top]%13+1)+” ]”);
+System.out.print(‘\t’);
+if(top%4==0) 
+System.out.println( );
+top--;
+}
+}
+public static void push(int stack[ ],intMAX,intval)
+{
+if(top>=MAX-1)
+System.out.println(“[堆栈已经满了]”);
+else
+{
+top++;
+stack[top]=val;
+}
+}
+public static int pop(int stack[ ])
+{
+if(top<0)
+System.out.println(“[堆栈已经满了]”);
+else
+top--;
+return stack[top];
+}
+}
+
+范例3：
+//=========================Program Description==================
+//程序名称：
+//程序目的：链表制作堆栈
+//=============================================================
+
+import java.io,*;
+
+class Node  //链接节点的声明
+{
+int data;
+Node next;
+public Node(int data)
+{
+this.data=data;
+this.next=null;
+}
+}
+
+class StackByLink
+{
+public Node front;   //指向堆栈底端的指针
+public Node rear;    //指向堆栈顶端的指针
+//类方法：isEmpty()
+//判断堆栈如果为空堆栈，则front==null;
+public BooleanisEmpty()
+{
+return front==null;
+}
+//类方法：output_of_Stack( )
+//打印堆栈内容
+public void output_of_Stack( )
+{
+Node current=front;
+while(current!=null)
+{
+System.out.print(“[“+current.data+”]”);
+current=current.next;
+}
+System.out.println( );
+}
+//类方法：output_of_Stack( )
+//在堆栈顶端加入数据
+public void insert( int data)
+{
+Node newNode=new Node(data);
+if(this.isEmpty( ))
+{
+front=newNode;
+rear=newNode;
+}
+else
+{
+rear.next=newNode;
+rear=newNode;
+}
+}
+//类方法：output_of_Stack( )
+//在堆栈顶端删除数据
+public void pop()
+{
+Node newNode;
+if(this.isEmpty( ))
+{
+System.out.print(“===目前为空堆栈===”\n);
+return;
+}
+newNode=front;
+if(newNode==rear)
+{
+front=null;
+rear=null;
+System.out.print(“===目前为空堆栈===”\n);
+}
+else
+{
+while(newNode.next!=rear)
+newNode=newNode.next;
+newNode.next=rear.next;
+rear=newNode;
+}
+}
+}
+class CH04_03
+{
+public static void main(String args[ ] throws IOException
+{
+BufferedReaderbuf;
+buf=new BufferedReader(new InputStreamReader(System.in));
+StackByLInkstack_by_linkedlist=new StackByLink( );
+int choice=0;
+while(true)
+{
+System.out.print(“(0)结束(1)在堆栈中加入数据(2)弹出堆栈数据:”);
+choice=Integer.parseInt(buf.readLine( ));
+if(choice==2)
+{
+stack_by_linkedlist.pop();
+System.out.println(“数据弹出后的堆栈内容:”);
+stack_by_linkedlist.output_of_Stack();
+}
+else if(choice==1)
+{ 
+System.out.print(“请输入要加入堆栈的数据”);
+choice=Integer.parseInt(buf.readLine( ));
+stack_by_linkedlist.insert(choice);
+System.out.print(“数据加入后的堆栈内容”);
+stack_by_linkedlist.output_of_Stack();
+}
+else if(choice==0)
+break;
+else
+{
+System.out.println(“输入错误!!”);
+}
+}
+}
+}

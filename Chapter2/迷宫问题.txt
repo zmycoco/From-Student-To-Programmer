@@ -1,0 +1,137 @@
+范例程序1：
+class Nose
+{
+int x;
+int y;
+Node next;
+public Node(intx,int y)
+{
+this.x=x;
+this.y=y;
+this.next=null;
+}
+}
+public class TraceRecord
+{
+public Node first;
+public Node last;
+public BooleanisEmpty()
+{
+return first==null;
+}
+public void insert(intx,int y)
+{
+Node newNode=new node(x,y);
+if(this.isEmpty())
+{
+first=newNode;
+last=newNode;
+}
+else
+{
+last.next=newNode;
+last=newNode;
+}
+}
+public void delete( )
+{
+Node newNode;
+if(this.isEmpty( ))
+{
+System.out.print(“[队列已经空了]\n”);
+return;
+}
+newNode=first;
+while(newNode.next!=last)
+newNode=newNode.next;
+newNode.next=last.next;
+last=newNode;
+}
+}
+
+范例程序2：
+import java.io.*;
+public class CH04_05
+{
+   public static intExitX=8                          //定义出口的X坐标在第8行
+public static intExitY=10                         //定义出口的Y坐标在第10列
+public static int [ ][ ] MAZE={{1,1,1,1,1,1,1,1,1,1,1,1},
+                       {1,0,0,0,1,1,1,1,1,1,1,1},
+                       {1,1,1,0,1,1,0,0,0,0,1,1},
+                       {1,1,1,0,1,1,0,1,1,0,1,1}, 
+                          {1,1,1,0,0,0,0,1,1,0,1,1},
+                          {1,1,1,0,1,1,0,1,1,0,1,1},
+                          {1,1,1,0,1,1,0,1,1,0,1,1},
+                          {1,1,1,1,1,1,0,1,1,0,1,1},
+{1,1,0,0,0,0,0,0,1,0,0,1},
+                       {1,1,1,1,1,1,1,1,1,1,1,1}};
+public static void main(String args[ ] throws IOException
+{
+intI,j,x,y;
+TraceRecord path=new TraceRecord( );
+x=1;
+y=1;
+System.out.print(“[迷宫的路径(0的部分)]\n);
+for(i=0;i<10;i++)
+{
+for(j=0;j<12;j++)
+System.out.print(MAZE[i][j]);
+System.out.print(“\n”);
+}
+while (x<=ExitX&&y<=ExitY)
+{
+MAZE[x][y]=2;
+if(MAZE[x-1][y]==0)
+{
+x-=1;
+path.insert(x,y);
+}
+else if(MAZE[x+1][y]==0)
+{
+x+=1;
+path.insert(x,y);
+}
+else if(MAZE[x][y-1]==0)
+{
+y-=1;
+path.insert(x,y);
+}
+else if(MAZE[x][y+1])==0)
+{
+y+=1;
+path.insert(x,y);
+}
+else if(chkExit(x,y,ExitX,ExitY)==1)
+break;
+else
+{
+MAZE[x][y]=2;
+path.delete( );
+x=path.last.x;
+y=path.last.y;
+}
+}
+System.out.print(“[老鼠走过的路径(2的部分)]\n”);
+for(i=0;i<10;i++)
+{
+for(j=0;j<12;j++)
+System.out.print(MAZE[i][j]);
+System.out.print(“\n”);
+}
+}
+public static int chkExit(int x,int y,int ex,int ey)
+{
+if(x==ex && y==ey)
+{
+if(MAZE[x-1][y]==1 || MAZE[x+1][y]==1 || MAZE[x][y-1]==1 || MAZE[x][y+1]==2)
+return 1;
+if(MAZE[x-1][y]==1 || MAZE[x+1][y]==1 || MAZE[x][y-1]==2 || MAZE[x][y+1]==1)
+return 1;
+if(MAZE[x-1][y]==1 || MAZE[x+1][y]==2 || MAZE[x][y-1]==1 || MAZE[x][y+1]==1)
+return 1;
+if(MAZE[x-1][y]==1 || MAZE[x+1][y]==1 || MAZE[x][y-1]==1 || MAZE[x][y+1]==1)
+return 1;
+}
+return 0;
+}
+}

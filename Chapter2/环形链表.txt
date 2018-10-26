@@ -1,0 +1,359 @@
+范例1：
+/*CircleLink.java*/
+importjava.util.*;
+import java.io.*;
+
+class Node
+{
+int data;
+Node next;
+public Node(int data)
+{
+this.data=data;
+this.next=null;
+}
+}
+public class CircleLink
+{
+public Node first;
+public Node last;
+public BooleanisEmpty()
+{
+return first==null;
+}
+public void print()
+{
+Node current=first;
+while(current!=last)
+{
+System.out.print(“[“+current.data+”]”);
+current=current.next;
+}
+Sysrem.out.print(“[+current.data+”]”);
+System.out.print();
+}
+/*插入节点*/
+public void insert(Node trp){
+Node tmp;
+Node newNode;
+if(this.isEmpty())
+{
+first=trp;
+last=trp;
+last.next=first;
+}
+else if(trp.next==null)
+{
+first=trp;
+last=trp;
+last.next=first;
+}
+{
+newNode=first;
+tmp=first;
+while(newNode.next!=trp.next)
+{
+if(tmp.next==first)
+break;
+tmp=newNode;
+newNode=newNode.next;
+}
+tmp.next=trp;
+trp.next=newNode;
+}
+}
+
+/*删除节点*/
+public void delete(Node delNode)
+{
+Node nexNode;
+Node tmp;
+if(this.isEmpty())
+{
+System.out.print(“[环形链表已经空了]\n”);
+return;
+}
+if(first.data==delNode.data)//要删除的节点是表头
+{
+first=first.next;
+if(first==null)
+System.out.print(“[环形链表已经空了]\n”);
+return;
+}
+else if (last.data==delNode.data)//要删除的节点是表尾
+{
+newNode=first;
+while(newNode.next!=last) newNode=newNode.next;
+newNode.next=last.next;
+last=newNode;
+last.next=first;
+}
+else
+{
+newNode=first;
+tmp=first;
+while(newNode.data!=delNode.data)
+{
+tmp=newNode;
+newNode=newNode.next;
+}
+tmp.next=delNode.next;
+}
+}
+
+范例2：
+class Node
+{
+int data;
+int np;
+String names;
+Node next;
+public Node(intdata,stringnames,int np)
+{
+this.np=np;
+This.names=names;
+this.data=data;
+this.next=null;
+}
+}
+public class StuLinkedList
+{
+public Node first;
+public Node last;
+public BooleanisEmpty()
+{
+return first==null;
+}
+public void print()
+{
+Node current=first;
+while(current!=null)
+{
+System.out,println(“[+current.data+”“+current.names+”“+current.np+” ]“);
+current=current.next;
+}
+System.out.println();
+}
+public void insert(intdata,stringnames,int np)
+{
+Node newNode=new Node(data,names,np);
+if(this.isEmpty())
+{
+first=newNode;
+last=newNode;
+}
+else
+{
+last.next=newNode;
+last=newNode;
+}
+}
+public void delete(Node delNode)
+{
+Node newNode;
+Node tmp;
+if(first.data==delNode.data)
+{
+first=first.next;
+}
+else if (last.data==delNode.data)
+{
+System.out.println(“I am here\n”);
+newNode=first;
+while(newNode.next!=next)newNode=newNode.next;
+newNode.next=last.next;
+last=newNode;
+}
+else
+{
+newNode=first;
+tmp=first;
+while(newNode.data!=delNode.data){
+tmp=newNode;
+newNode=newNode.next;
+}
+tmp.next=delNode.next;
+}
+}
+}
+
+//========================	Program Description======================
+//程序名称：
+//程序目的：将两个学生成绩表串联起来，然后打印串联后的表内容
+//==================================================================
+importjava.util.*;
+import java.io.*;
+
+class ConcatStuLinkedList extends  StuLinkedList
+{
+public stuLinkedListconcat(StuLinkedListstulist)
+{
+this.last.next=stulist.first;
+this.last=stulist.last;
+return this;
+}
+}
+
+public class CH03_05
+{
+public static void main(String args[ ] throws IOException
+{
+random rand=new Random();
+concatStuLinkedList list1=new ConcatStuLinkedList();
+StuLinkedList list2=new StuLinkedList();
+inti,j,data[ ] [ ]=new int [12][10];
+String name1[ ]=new string[ ]
+{“Allen”,”Scott”,”Marry”,”Jon”,”Mark”,”Ricky”,”Michael”,”Tom”};
+String name2[ ]=new String[ ]
+{“Lisa”,”Jasica”,”Hanson”,”Amy”,”Bob”,”Jack”,”John”,”Andy”};
+System.out.println(“学号成绩学号成绩学号成绩学号成绩\n”);
+for(i=0;i<8;i++)
+{
+data[i][0]=i+1;
+data[i][1]=(Math.abs(rand.nextInt(50)))+50;
+list1.insert(data[i][0],name1[i],data[i][1]);
+}
+for(i=0;i<2;i++)
+{
+for(j=0;j<4;j++)
+System.out.print(“[“+data[j+i*4][0]+”][“+data[j+i*4][1]+”]“);
+System.out.println();
+}
+for(i=0;i<8;i++)
+{
+data[i][0]=i+9;
+data[i][1]=(Math.abs(rand.nextInt(50)))+50;
+list2.insert(data[i][0],name2[i],data[i][1]);
+}
+for(i=0;i<2;i++)
+{
+for(j=0;j<4;j++)
+System.out.print(“[“+data[j+i*4][0]+”][“+data[j+i*4][1]+”]“);
+System.out.println();
+}
+list1.concat(list2);
+list1.print();
+}
+}
+
+范例3：
+importjava.util.*/
+import java.io.*/
+
+class Node
+{
+int data;
+Node rnext;
+Node lnext;
+public Node(int data)
+{
+this.data=data;
+this.rnext=null;
+this.lnext=null;
+}
+}
+public class Doubly
+{
+public Node first;
+public Node last;
+public BooleanisEmpty()
+{
+return first==null;
+}
+public void print()
+{
+Node current=first;
+while(current!=null)
+{
+system.out.print(“[“+current.data+”]”);
+current=current.rnext;
+}
+System.out.println();
+}
+/*插入节点*/
+public void insert(Node newN)
+{
+Node tmp;
+Node newNode;
+if(this.isEmpty())
+{
+first=newN;
+first.rnext=last;
+last=newN;
+last.lnext=first;
+}
+else
+{
+if(newN.lnext==null)/*插入表头的位置*/
+{
+first.lnext=newN;
+newN.rnext=first;
+first=newN;
+}
+else
+{
+if(newN.rnext==null)/*插入表尾的位置*/
+{
+last.rnext=newN;
+newN.lnext=last;
+first=newN;
+}   
+else     /*插入中间节点的位置*/
+{
+newNode=first;
+tmp=first;
+while(newN.rnext!=newNode.rnext)
+{
+tmp=newNode;
+newNode=newNode.rnext;
+}
+tmp.rnext=newN;
+newN.rnext=newNode;
+newNode.lnext=tmp;
+newN.lnext=tmp;
+}
+}
+}
+}
+/*删除节点*/
+public void delete(Node delNode)
+{
+Node newNode;
+Node tmp;
+if(first==null)
+{
+System.out.print(“[表是空的]\n”);
+return;
+}
+if(delNode==null)
+{
+System.out.print(“[错误：del不是表中的节点]\n”);
+return;
+}
+if(first.data==delNode.data)//要删除的节点是表头
+{
+first=first.rnext;
+First.lnext=null;
+}
+else if(last.data==delNode.data)//要删除的节点是表尾
+{
+newNode=first;
+while(newNode.rnext!=last)
+newNode=newNode.rnext;
+newNode.rnext=null;
+last=newNode;
+}
+else 
+{
+newNode=first;
+tmp=first;
+while(newNode.data!=delNode.data)
+{
+tmp=newNode;
+newNode=newNode.rnext;
+}
+tmp.rnext=delNode.rnext;
+tmp.lnext=delNode.lnext;
+}
+}
+}
