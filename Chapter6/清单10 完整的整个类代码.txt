@@ -1,0 +1,96 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+ 
+import org.springframework.cassandra.core.WriteOptions;
+import org.springframework.data.cassandra.core.CassandraOperations;
+import org.springframework.data.cassandra.core.CassandraTemplate;
+ 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.core.querybuilder.Select;
+ 
+public class App {
+    private static Cluster cluster;
+    private static Session session;
+ 
+    public static void main(String[] args) {
+ 
+        try {
+ 
+            cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+ 
+            session = cluster.connect("testsource");
+ 
+            CassandraOperations cassandraOps = new CassandraTemplate(session);
+ 
+            // To insert a single User information into Database
+            final Users insertedUsers = cassandraOps.insert(new Users(11104,
+                    "UK", "Alex"));
+ 
+            System.out.println(insertedUsers.getId());
+ 
+            print(cassandraOps, insertedUsers.getId() );
+ 
+            // To insert multiple User information at a time.
+            // Bulk insert operation
+            final Users user1 = new Users(11105, "Australia", "Mike");
+            final Users user2 = new Users(11106, "India", "Ram");
+            final List<Users> userList = new ArrayList<>();
+            userList.add(user1);
+            userList.add(user2);
+ 
+            final List<Users> insertedUserList = cassandraOps.insert(userList);
+            System.out.println("\n" + insertedUserList );
+            printList(cassandraOps, Arrays.asList(11105, 11106));
+ 
+            cassandraOps.insert(userList, null);
+ 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cluster.close();
+        }
+    }
+ 
+    private static void print(final CassandraOperations inCassandraOps,
+            final int inId) {
+ 
+        System.out.println("Spring Data Cassandra Single insert Example");
+        System.out.println("============================================");
+ 
+        final String[] columns = new String[] { "id", "address", "name" };
+ 
+        Select select = QueryBuilder.select(columns).from("users");
+        select.where(QueryBuilder.eq("id", inId));
+ 
+        final List<Users> results = inCassandraOps.select(select, Users.class);
+ 
+        for (Users user : results) {
+            System.out.println("User Id is: " + user.getId());
+            System.out.println("User Address is: " + user.getAddress());
+            System.out.println("User Name is: " + user.getName());
+        }
+    }
+ 
+    private static void printList(final CassandraOperations inCassandraOps,
+            final List<Integer> inIdList) {
+ 
+        System.out.println("Spring Data Cassandra bulk insert Example");
+        System.out.println("============================================");
+ 
+        final String[] columns = new String[] { "id", "address", "name" };
+ 
+        Select select = QueryBuilder.select(columns).from("users");
+        select.where(QueryBuilder.in("id", inIdList));
+ 
+        final List<Users> results = inCassandraOps.select(select, Users.class);
+ 
+        for (Users user : results) {
+            System.out.println("User Id is: " + user.getId());
+            System.out.println("User Address is: " + user.getAddress());
+            System.out.println("User Name is: " + user.getName());
+        }
+    }
+}

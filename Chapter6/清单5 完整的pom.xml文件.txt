@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelversion>4.0.0</modelversion>
+ 
+  <groupid>com.devjavasource.cassandra</groupid>
+  <artifactid>SpringDataCassandraExample</artifactid>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+ 
+  <name>SpringDataCassandraExample</name>
+  <url>http://maven.apache.org</url>
+ 
+  <properties>
+    <project.build.sourceencoding>UTF-8</project.build.sourceencoding>
+  </properties>
+ 
+  <dependencies>
+    <dependency>
+      <groupid>junit</groupid>
+      <artifactid>junit</artifactid>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupid>com.datastax.cassandra</groupid>
+      <artifactid>cassandra-driver-core</artifactid>
+      <version>°æ±¾ºÅ</version>
+    </dependency>
+     
+    <dependency>
+        <groupid>org.springframework.data</groupid>
+        <artifactid>spring-data-cassandra</artifactid>
+        <version>°æ±¾ºÅ</version>
+    </dependency>
+  </dependencies>
+</project>
