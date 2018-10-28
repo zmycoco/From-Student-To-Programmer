@@ -1,0 +1,13 @@
+Public double avgRating(){
+      double sum = 0;
+      for(Review review : reviews){
+          sum+=review.getValue();
+      }
+      return sum / reviews.size();
+}
+ArrayList<Product> highRating = new ArrayList<>();
+for(Product product : products){
+if(product.avgRating() >= 4){
+    highRating.add(product);
+}
+}

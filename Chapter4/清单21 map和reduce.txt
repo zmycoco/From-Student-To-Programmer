@@ -1,0 +1,20 @@
+Java7£º
+int numOfCategories = 0;
+for(Product product : products){
+    numOfCategories += product.getCategories().size();
+}
+//Java 7
+Min time£º6
+Average time£º7.5
+//Java 8
+int numOfCategories = 
+product.stream()
+      .map(p -> p.getCategories().size())
+      .reduce(0,(s1,s2)->s1 + s2);
+
+// Java8 sequential stream
+Min time£º14
+Average time£º27.0
+//Java8 parallel stream
+Min time£º7
+Average time£º19.8

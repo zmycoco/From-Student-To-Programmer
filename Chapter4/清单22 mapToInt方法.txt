@@ -1,0 +1,12 @@
+//Java 8
+int numOfCategories = 
+product.stream()
+      .mapToInt(p -> p.getCategories().size())
+      .reduce(0,(s1,s2)->s1 + s2);
+
+// Java8 sequential stream
+Min time£º6
+Average time£º11.2
+//Java8 parallel stream
+Min time£º4
+Average time£º8.8

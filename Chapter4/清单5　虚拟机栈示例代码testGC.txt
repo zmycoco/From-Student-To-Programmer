@@ -1,0 +1,12 @@
+public class testGC {
+    public static void test1()
+        {
+            byte[] a = new byte[6*1024*1024];//这里申请4M内存作为缓冲区的大小，然后调用GC释放
+        }
+        System.gc();
+        System.out.println("first explict gc over");
+
+    public static void main(String[] args){
+        testGC.test1();
+    }
+}

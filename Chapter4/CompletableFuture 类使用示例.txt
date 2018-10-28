@@ -1,0 +1,222 @@
+创建完整的 CompletableFuture
+（1）	清单 5 示例代码
+static void completedFutureExample() {
+CompletableFuture<String>cf = CompletableFuture.completedFuture("message");
+assertTrue(cf.isDone());
+assertEquals("message", cf.getNow(null));
+}
+以上代码一般来说被用于启动异步计算，getNow(null)返回计算结果或者 null。
+运行简单的异步场景
+（2）	清单 6示例代码
+static void runAsyncExample() {
+CompletableFuture<Void>cf = CompletableFuture.runAsync(() -> {
+assertTrue(Thread.currentThread().isDaemon());
+randomSleep();
+    });
+assertFalse(cf.isDone());
+sleepEnough();
+assertTrue(cf.isDone());
+}
+同步执行动作示例
+（3）	清单 7 示例代码
+static void thenApplyExample() {
+CompletableFuture<String>cf = CompletableFuture.completedFuture("message").thenApply(s -> {
+assertFalse(Thread.currentThread().isDaemon());
+returns.toUpperCase();
+    });
+assertEquals("MESSAGE", cf.getNow(null));
+}
+异步执行动作示例 
+4）	清单 8 示例代码
+static void thenApplyAsyncExample() {
+CompletableFuture<String>cf = CompletableFuture.completedFuture("message").thenApplyAsync(s -> {
+assertTrue(Thread.currentThread().isDaemon());
+randomSleep();
+returns.toUpperCase();
+    });
+assertNull(cf.getNow(null));
+assertEquals("MESSAGE", cf.join());
+}
+使用固定的线程池完成异步执行动作示例
+（5）	清单 9 示例代码
+staticExecutorService executor = Executors.newFixedThreadPool(3, new ThreadFactory() {
+int count = 1;
+    @Override
+public Thread newThread(Runnable runnable) {
+return new Thread(runnable, "custom-executor-" + count++);
+    }
+});
+static void thenApplyAsyncWithExecutorExample() {
+CompletableFuture<String>cf = CompletableFuture.completedFuture("message").thenApplyAsync(s -> {
+assertTrue(Thread.currentThread().getName().startsWith("custom-executor-"));
+assertFalse(Thread.currentThread().isDaemon());
+randomSleep();
+returns.toUpperCase();
+    }, executor);
+assertNull(cf.getNow(null));
+assertEquals("MESSAGE", cf.join());
+}	
+
+作为消费者消费计算结果示例
+（6）	清单 10示例代码
+static void thenAcceptExample() {
+StringBuilder result = new StringBuilder();
+CompletableFuture.completedFuture("thenAccept message")
+            .thenAccept(s ->result.append(s));
+assertTrue("Result was empty", result.length() > 0);
+}
+异步消费示例
+（7）	清单 11 示例代码
+static void thenAcceptAsyncExample() {
+StringBuilder result = new StringBuilder();
+CompletableFuture<Void>cf = CompletableFuture.completedFuture("thenAcceptAsync message")
+            .thenAcceptAsync(s ->result.append(s));
+cf.join();
+assertTrue("Result was empty", result.length() > 0);
+}
+
+计算过程中的异常示例 
+（8）	清单 12 示例代码
+static void completeExceptionallyExample() {
+CompletableFuture<String>cf = CompletableFuture.completedFuture("message").thenApplyAsync(String::toUpperCase,
+CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS));
+CompletableFuture<String>exceptionHandler = cf.handle((s, th) -> { return (th != null) ? "message upon cancel" : ""; });
+cf.completeExceptionally(new RuntimeException("completed exceptionally"));
+assertTrue("Was not completed exceptionally", cf.isCompletedExceptionally());
+try {
+cf.join();
+fail("Should have thrown an exception");
+    } catch(CompletionException ex) { // just for testing
+assertEquals("completed exceptionally", ex.getCause().getMessage());
+    }
+assertEquals("message upon cancel", exceptionHandler.join())取消计算任务;
+}
+取消计算任务
+（9）	清单 13 示例代码
+static void cancelExample() {
+    CompletableFuture cf = CompletableFuture.completedFuture("message").thenApplyAsync(String::toUpperCase,
+            CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS));
+    CompletableFuture cf2 = cf.exceptionally(throwable -> "canceled message");
+    assertTrue("Was not canceled", cf.cancel(true));
+    assertTrue("Was not completed exceptionally", cf.isCompletedExceptionally());
+    assertEquals("canceled message", cf2.join());
+
+}
+一个 CompletableFuture VS 两个异步计算
+（10）	清单 14 示例代码
+static void applyToEitherExample() {
+    String original = "Message";
+    CompletableFuture cf1 = CompletableFuture.completedFuture(original)
+            .thenApplyAsync(s -> delayedUpperCase(s));
+    CompletableFuture cf2 = cf1.applyToEither(
+            CompletableFuture.completedFuture(original).thenApplyAsync(s -> delayedLowerCase(s)),
+            s -> s + " from applyToEither");
+    assertTrue(cf2.join().endsWith(" from applyToEither"));
+}
+（11）	清单 15 示例代码
+static void acceptEitherExample() {
+    String original = "Message";
+    StringBuilder result = new StringBuilder();
+    CompletableFuture cf = CompletableFuture.completedFuture(original)
+            .thenApplyAsync(s -> delayedUpperCase(s))
+            .acceptEither(CompletableFuture.completedFuture(original).thenApplyAsync(s -> delayedLowerCase(s)),
+                    s -> result.append(s).append("acceptEither"));
+    cf.join();
+    assertTrue("Result was empty", result.toString().endsWith("acceptEither"));
+}
+
+运行两个阶段后执行
+（12）	清单 16 示例代码
+static void runAfterBothExample() {
+    String original = "Message";
+    StringBuilder result = new StringBuilder();
+    CompletableFuture.completedFuture(original).thenApply(String::toUpperCase).runAfterBoth(
+            CompletableFuture.completedFuture(original).thenApply(String::toLowerCase),
+            () -> result.append("done"));
+    assertTrue("Result was empty", result.length() > 0);
+}
+也可以通过以下方式处理异步计算结果，
+（13）	清单 17 示例代码
+static void thenAcceptBothExample() {
+    String original = "Message";
+    StringBuilder result = new StringBuilder();
+    CompletableFuture.completedFuture(original).thenApply(String::toUpperCase).thenAcceptBoth(
+            CompletableFuture.completedFuture(original).thenApply(String::toLowerCase),
+            (s1, s2) -> result.append(s1 + s2));
+    assertEquals("MESSAGEmessage", result.toString());
+}
+
+整合两个计算结果
+（14）	清单 18 示例代码
+static void thenCombineExample() {
+    String original = "Message";
+    CompletableFuture cf = CompletableFuture.completedFuture(original).thenApply(s -> delayedUpperCase(s))
+            .thenCombine(CompletableFuture.completedFuture(original).thenApply(s -> delayedLowerCase(s)),
+                    (s1, s2) -> s1 + s2);
+    assertEquals("MESSAGEmessage", cf.getNow(null));
+}
+
+}
+（16）	清单 20 示例代码
+static void thenComposeExample() {
+    String original = "Message";
+    CompletableFuture cf = CompletableFuture.completedFuture(original).thenApply(s -> delayedUpperCase(s))
+            .thenCompose(upper -> CompletableFuture.completedFuture(original).thenApply(s -> delayedLowerCase(s))
+                    .thenApply(s -> upper + s));
+    assertEquals("MESSAGEmessage", cf.join());
+}
+anyOf()方法
+（17）	清单 21 示例代码
+static void anyOfExample() {
+    StringBuilder result = new StringBuilder();
+    List messages = Arrays.asList("a", "b", "c");
+    List<CompletableFuture> futures = messages.stream()
+            .map(msg -> CompletableFuture.completedFuture(msg).thenApply(s -> delayedUpperCase(s)))
+            .collect(Collectors.toList());
+    CompletableFuture.anyOf(futures.toArray(new CompletableFuture[futures.size()])).whenComplete((res, th) -> {
+        if(th == null) {
+            assertTrue(isUpperCase((String) res));
+            result.append(res);
+        }
+    });
+    assertTrue("Result was empty", result.length() > 0);
+}
+
+当所有的 CompletableFuture 完成后创建 CompletableFuture
+}
+
+（19）	清单 23 示例代码
+static void allOfAsyncExample() {
+    StringBuilder result = new StringBuilder();
+    List messages = Arrays.asList("a", "b", "c");
+    List<CompletableFuture> futures = messages.stream()
+            .map(msg -> CompletableFuture.completedFuture(msg).thenApplyAsync(s -> delayedUpperCase(s)))
+            .collect(Collectors.toList());
+    CompletableFuture allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]))
+            .whenComplete((v, th) -> {
+                futures.forEach(cf -> assertTrue(isUpperCase(cf.getNow(null))));
+                result.append("done");
+            });
+    allOf.join();
+    assertTrue("Result was empty", result.length() > 0);
+}
+
+实际案例
+（20）	清单 24 示例代码
+cars().thenCompose(cars -> {
+    List<CompletionStage> updatedCars = cars.stream()
+            .map(car -> rating(car.manufacturerId).thenApply(r -> {
+                car.setRating(r);
+                return car;
+            })).collect(Collectors.toList());
+    CompletableFuture done = CompletableFuture
+            .allOf(updatedCars.toArray(new CompletableFuture[updatedCars.size()]));
+    return done.thenApply(v -> updatedCars.stream().map(CompletionStage::toCompletableFuture)
+            .map(CompletableFuture::join).collect(Collectors.toList()));
+}).whenComplete((cars, th) -> {
+    if (th == null) {
+        cars.forEach(System.out::println);
+    } else {
+        throw new RuntimeException(th);
+    }
+}).toCompletableFuture().join();

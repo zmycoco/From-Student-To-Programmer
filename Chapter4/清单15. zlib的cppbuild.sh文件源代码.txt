@@ -1,0 +1,37 @@
+#!/bin/bash
+# This file is meant to be included by the parent cppbuild.sh script
+if [[ -z "$PLATFORM" ]]; then
+    pushd ..
+    bash cppbuild.sh "$@" zlib
+    popd
+    exit
+fi
+
+if [[ $PLATFORM == windows* ]]; then
+    ZLIB_VERSION=128
+    download http://zlib.net/zlib$ZLIB_VERSION-dll.zip zlib$ZLIB_VERSION-dll.zip
+    mkdir -p $PLATFORM
+    cd $PLATFORM
+    unzip ../zlib$ZLIB_VERSION-dll.zip -d zlib$ZLIB_VERSION-dll
+    cd zlib$ZLIB_VERSION-dll
+else
+    ZLIB_VERSION=1.2.8
+    download http://zlib.net/zlib-$ZLIB_VERSION.tar.gz zlib-$ZLIB_VERSION.tar.gz
+    mkdir -p $PLATFORM
+    cd $PLATFORM
+    tar -xzvf ../zlib-$ZLIB_VERSION.tar.gz
+    cd zlib-$ZLIB_VERSION
+fi
+
+case $PLATFORM in
+    linux-x86)
+        CC="gcc -m32 -fPIC" ./configure --prefix=.. --static
+        make -j4
+        make install
+        ;;
+    *)
+        echo "Error: Platform \"$PLATFORM\" is not supported"
+        ;;
+esac
+
+cd ../..

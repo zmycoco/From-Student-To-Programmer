@@ -1,0 +1,27 @@
+private static int sumFormOne(int num){
+int sum = 0;
+for(int i = 1;i <= num;i++){
+     sum += i;
+}
+return sum;
+}
+Java 7£º
+int numOfCategories = 0;
+for(Product product : products){
+    numOfCategories += sumFormOne(product.getCategories().size());
+}
+//Java 7
+Min time£º14
+Average time£º14.9
+Java 8£º
+int numOfCategories = 
+product.stream()
+      .mapToInt(p -> sumFormOne(p.getCategories().size()))
+      .reduce(0,(s1,s2)->s1 + s2);
+
+// Java8 sequential stream
+Min time£º11
+Average time£º16.3
+//Java8 parallel stream
+Min time£º5
+Average time£º11.0

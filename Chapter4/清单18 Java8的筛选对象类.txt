@@ -1,0 +1,9 @@
+Public double avgRating(){
+     double sum = reviews.stream()
+                     .map(r->r.getValue())
+                     .reduce(0,(v1,v2)->v1 + v2);
+     return sum / reviews.size();
+}
+ArrayList<Product> highRating = products.stream()
+                      .filter(p -> p.avgRating() >= 4)
+                      .collect(toCollection(ArrayList::new));

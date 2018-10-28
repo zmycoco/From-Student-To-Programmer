@@ -1,0 +1,17 @@
+public class Key implements Comparable<Key>{
+      private int value;
+      
+      public Key(int value){
+    	      this.value = value;
+      }
+      
+      @Override
+      public int compareTo(Key key){
+    	      return this.value - key.value;
+      }
+      
+      @Override
+      public int hashCode(){
+    	      return 1;//A poorly written hash function.
+      }
+}
