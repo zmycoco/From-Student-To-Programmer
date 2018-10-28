@@ -1,0 +1,11 @@
+@Controller
+public class HomeController
+{
+    @Autowired UserRepository userRepo;
+    @RequestMapping("/")
+    public String home(Model model)
+    {
+        model.addAttribute("users", userRepo.findAll());
+        return "index";
+    }
+}
