@@ -1,0 +1,19 @@
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;  
+import org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;  
+  
+public class loadIncrementalHFileToHBase {  
+  
+   public static void main(String[] args) throws Exception {  
+        Configuration conf = HBaseConfiguration.create();
+        HBaseHelper helper = HBaseHelper.getHelper(conf);
+        helper.dropTable("testtable2");
+        helper.createTable("testtable2", "colfam1");
+        HTable table = new HTable("testtable2");  
+        LoadIncrementalHFiles loader = new LoadIncrementalHFiles(conf);  
+        loader.doBulkLoad(new Path(args[0]), table);
+   }  
+ 
+}

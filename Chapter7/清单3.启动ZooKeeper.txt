@@ -1,0 +1,4 @@
+[root@localhost bin]# ./zkServer.sh start
+ZooKeeper JMX enabled by default
+Using config: /home/zhoumingyao/zookeeper/zookeeper-3.4.7/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED

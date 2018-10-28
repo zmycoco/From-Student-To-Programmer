@@ -1,0 +1,13 @@
+public class CallbackClass implements MyCallInterface{
+	public void method()  
+    {  
+System.out.println("»Øµ÷º¯Êý");  
+    }  
+
+public static void main(String args[])  
+    {  
+       Caller call = new Caller();  
+call.setCallfuc(new CallbackClass());  
+call.call();  
+    }  
+}

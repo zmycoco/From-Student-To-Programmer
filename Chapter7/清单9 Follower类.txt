@@ -1,0 +1,30 @@
+voidfollowLeader() throws InterruptedException {
+try {
+connectToLeader(addr);
+longnewEpochZxid = registerWithLeader(Leader.FOLLOWERINFO);
+
+                //check to see if the leader zxid is lower than ours
+                //this should never happen but is just a safety check
+longnewEpoch = ZxidUtils.getEpochFromZxid(newEpochZxid);
+if (newEpoch<self.getAcceptedEpoch()) {
+LOG.error("Proposed leader epoch " + ZxidUtils.zxidToString(newEpochZxid)
+                            + " is less than our accepted epoch " + ZxidUtils.zxidToString(self.getAcceptedEpoch()));
+throw new IOException("Error: Epoch of leader is lower");
+                }
+syncWithLeader(newEpochZxid);                
+QuorumPacketqp = new QuorumPacket();
+while (self.isRunning()) {
+readPacket(qp);
+processPacket(qp);
+                }
+            } catch (Exception e) {
+LOG.warn("Exception when following the leader", e);
+try {
+sock.close();
+                } catch (IOException e1) {
+e1.printStackTrace();
+                }
+
+                // clear pending revalidations
+pendingRevalidations.clear();
+            }

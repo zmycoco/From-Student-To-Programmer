@@ -1,0 +1,3 @@
+[root@localhostconf]# echo 1 > /var/lib/zookeeper/zoo1/myid
+[root@localhostconf]# echo 2 > /var/lib/zookeeper/zoo2/myid
+[root@localhostconf]# echo 3 > /var/lib/zookeeper/zoo3/myid

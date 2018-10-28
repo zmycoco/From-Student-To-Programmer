@@ -1,0 +1,8 @@
+state:=candidate;
+send(my_id):receive(nid);
+whilenid!=my_id
+do if nid>my_id
+then state:=no_leader;
+send(nid):receive(nid);
+od;
+if state=candidate then state:=leader;

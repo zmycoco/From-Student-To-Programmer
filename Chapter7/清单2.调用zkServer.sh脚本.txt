@@ -1,0 +1,4 @@
+[root@localhost bin]# ./zkServer.sh
+ZooKeeper JMX enabled by default
+Using config: /home/zhoumingyao/zookeeper/zookeeper-3.4.7/bin/../conf/zoo.cfg
+Usage: ./zkServer.sh {start|start-foreground|stop|restart|status|upgrade|print-cmd}

@@ -1,0 +1,88 @@
+import java.io.IOException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
+import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+public class HBaseImportByMapReduce extends Configured implements Tool {
+	static final Log LOG = LogFactory.getLog(HBaseImportByMapReduce.class);
+	public static final String JOBNAME = "MapReduceImport";
+	public static class Map extends Mapper<LongWritable , Text, NullWritable, NullWritable>{
+	    Configuration configuration = null;
+	    HTable xTable = null;
+        static long count = 0;
+        
+	    @Override
+	    protected void cleanup(Context context) throws IOException,InterruptedException {
+	         // TODO Auto-generated method stub
+	         super.cleanup(context);
+	         xTable.flushCommits();
+	         xTable.close();
+	    }
+	    
+	    @Override
+	    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+             String all[] = value.toString().split("/t");
+	         Put put = new Put(Bytes.toBytes(all[0])); 
+	         put.add(Bytes.toBytes("colfam1"),Bytes.toBytes("value1"), null);
+             xTable.put(put);
+             if ((++count % 100)==0) {
+            	  context.setStatus(count +" DOCUMENTS done!");
+            	  context.progress();
+            	  System.out.println(count +" DOCUMENTS done!");
+             }
+	    }
+
+	    @Override
+	    protected void setup(Context context) throws IOException,InterruptedException {
+             // TODO Auto-generated method stub
+	         super.setup(context);
+             configuration = context.getConfiguration();
+	         xTable = new HTable(configuration,"testtable2");
+	         xTable.setAutoFlush(false);
+             xTable.setWriteBufferSize(12*1024*1024);
+	    }
+
+	}
+
+	@Override
+	public int run(String[] args) throws Exception {
+         String input = args[0];
+	     Configuration conf = HBaseConfiguration.create(getConf());
+         conf.set("hbase.master", "node1:60000");
+	     Job job = new Job(conf,JOBNAME);
+	     job.setJarByClass(HBaseImportByMapReduce.class);
+	     job.setMapperClass(Map.class);
+	     job.setNumReduceTasks(0);
+	     job.setInputFormatClass(TextInputFormat.class);
+	     TextInputFormat.setInputPaths(job, input);
+         job.setOutputFormatClass(NullOutputFormat.class);
+         return job.waitForCompletion(true)?0:1;
+	}
+
+	public static void main(String[] args) throws IOException {
+	     Configuration conf = new Configuration();
+	     String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+	     int res = 1;
+	     try {
+	         res = ToolRunner.run(conf, new HBaseImportByMapReduce(), otherArgs);
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	     }
+	     System.exit(res);
+	}
+}

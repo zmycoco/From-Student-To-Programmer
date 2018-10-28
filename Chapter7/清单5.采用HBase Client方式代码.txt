@@ -1,0 +1,42 @@
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.IOException;
+
+public class PutDemo {
+
+  public static void main(String[] args) throws IOException {
+    //创建HBase上下文环境
+    Configuration conf = HBaseConfiguration.create(); 
+    System.out.println("conf="+conf);
+    int count=0;
+    
+    HBaseHelper helper = HBaseHelper.getHelper(conf);
+    System.out.println("helper="+helper);
+    helper.dropTable("testtable1");
+    helper.createTable("testtable1", "colfam1");
+    
+    HTable table = new HTable(conf, "testtable1"); 
+    long start = System.currentTimeMillis();
+for(int i=1;i<100000;i++){
+//设置rowkey的值
+    	Put put = new Put(Bytes.toBytes("row"+i)); 
+// 设置family:qualifier:value
+    	put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    		      Bytes.toBytes("val1")); 
+    		    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"),
+    		      Bytes.toBytes("val2")); 
+      //调用put方法，插入数据导HBase数据表testtable1里
+    	table.put(put); 
+    	count++;
+    	if(count%10000==0){
+    		System.out.println("Completed 10000 rows insetion");
+    	}
+    }
+    
+    System.out.println(System.currentTimeMillis() - start);
+  }
+}

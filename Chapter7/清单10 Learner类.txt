@@ -1,0 +1,8 @@
+protected void syncWithLeader(long newLeaderZxid) throws IOException, InterruptedException{
+caseLeader.UPTODATE:
+if (!snapshotTaken) { // true for the pre v1.0 case
+zk.takeSnapshot();
+self.setCurrentEpoch(newEpoch);
+                    }
+self.cnxnFactory.setZooKeeperServer(zk);                
+breakouterLoop;

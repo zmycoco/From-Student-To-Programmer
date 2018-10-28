@@ -1,0 +1,17 @@
+protected void processPacket(QuorumPacketqp) throws IOException{
+switch (qp.getType()) {
+caseLeader.PING:            
+ping(qp);            
+break;
+caseLeader.PROPOSAL:            
+TxnHeaderhdr = new TxnHeader();
+            Record txn = SerializeUtils.deserializeTxn(qp.getData(), hdr);
+if (hdr.getZxid() != lastQueued + 1) {
+LOG.warn("Got zxid 0x"
+                        + Long.toHexString(hdr.getZxid())
+                        + " expected 0x"
+                        + Long.toHexString(lastQueued + 1));
+            }
+lastQueued = hdr.getZxid();
+fzk.logRequest(hdr, txn);
+break;

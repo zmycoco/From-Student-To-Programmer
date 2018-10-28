@@ -1,0 +1,10 @@
+public void save(DataTreedataTree,
+ConcurrentHashMap<Long, Integer>sessionsWithTimeouts)
+throwsIOException {
+longlastZxid = dataTree.lastProcessedZxid;
+        File snapshotFile = new File(snapDir, Util.makeSnapshotName(lastZxid));
+LOG.info("Snapshotting: 0x{} to {}", Long.toHexString(lastZxid),
+snapshotFile);
+snapLog.serialize(dataTree, sessionsWithTimeouts, snapshotFile);
+
+    }

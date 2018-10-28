@@ -1,0 +1,13 @@
+case FOLLOWING:
+try {
+LOG.info("FOLLOWING");
+setFollower(makeFollower(logFactory));
+follower.followLeader();
+                    } catch (Exception e) {
+LOG.warn("Unexpected exception",e);
+                    } finally {
+follower.shutdown();
+setFollower(null);
+setPeerState(ServerState.LOOKING);
+                    }
+break;

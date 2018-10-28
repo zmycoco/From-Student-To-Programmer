@@ -1,0 +1,5 @@
+[root@localhost bin]# jps
+2737 QuorumPeerMain
+2751 Jps
+[root@localhost bin]# ps -ef | grep zookeeper | grep -v grep | awk '{print $2}'
+2608

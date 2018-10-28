@@ -1,0 +1,39 @@
+//开启4个用户线程，其中1个线程大量占用CPU资源，其他3个线程则处于空闲状态
+public class HoldCPUMain {
+public static class HoldCPUTask implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while(true){
+				double a = Math.random()*Math.random();//占用CPU
+				System.out.println(a);
+			}
+		}
+	
+     }
+
+public static class LazyTask implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while(true){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}//空闲线程
+			}
+		}
+	
+     }
+
+
+public static void main(String[] args){
+	for(inti=0;i<10;i++){
+		new Thread(new HoldCPUTask()).start();
+	 }
+     }
+}
