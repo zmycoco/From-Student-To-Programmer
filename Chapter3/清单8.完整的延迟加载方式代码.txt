@@ -1,0 +1,33 @@
+public class LazySingleton implements Runnable{
+privateLazySingleton(){
+	System.out.println("LazySingleton is create");
+     }
+private static LazySingleton instance = null;
+public static synchronized LazySingletongetInstance(){
+	if(instance == null){
+		instance = new LazySingleton();
+	 }
+	return instance;
+     }
+public static void createString(){
+	System.out.println("create String");
+     }
+
+     @Override
+	public void run() {
+		// TODO Auto-generated method stub
+	longbeginTime = System.currentTimeMillis();
+		for(inti=0;i<1000000;i++){
+			LazySingleton.getInstance();
+		}
+		System.out.println(System.currentTimeMillis() - beginTime);
+	 }
+
+public static void main(String[] args){
+	 //LazySingleton.createString();
+	for(inti=0;i<5;i++){
+		new Thread(new LazySingleton()).start();
+	 }
+     }
+	
+}

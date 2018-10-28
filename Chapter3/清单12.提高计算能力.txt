@@ -1,0 +1,54 @@
+importjava.util.Arrays;
+importjava.util.HashMap;
+importjava.util.Map;
+
+
+public class SpaceSort {
+public static intarrayLen = 1000000;
+
+public static void main(String[] args){
+	int[] a = new int[arrayLen];
+	int[] old = new int[arrayLen];
+	Map<Integer,Object> map = new HashMap<Integer,Object>();
+	int count = 0;
+	while(count <a.length){
+		//初始化数组
+		int value = (int)(Math.random()*arrayLen*10)+1;
+		if(map.get(value)==null){
+			map.put(value, value);
+			a[count] = value;
+			count++;
+		}
+	}
+	System.arraycopy(a, 0, old, 0, a.length);//从a数组拷贝所有数据到old数组
+	long start = System.currentTimeMillis();
+	Arrays.sort(a);
+	System.out.println("Arrays.sort spend:"+(System.currentTimeMillis() - start)+"ms");
+	System.arraycopy(old, 0, a, 0, old.length);//恢复原有数据
+	start = System.currentTimeMillis();
+	spaceTotime(a);
+	System.out.println("spaceTotime spend:"+(System.currentTimeMillis() - start)+"ms");
+    }
+
+public static void spaceTotime(int[] array){
+	inti = 0;
+	int max = array[0];
+	int l = array.length;
+	for(i=1;i<l;i++){
+		if(array[i]>max){
+			max = array[i];
+		}
+	}
+	int[] temp = new int[max+1];
+	for(i=0;i<l;i++){
+		temp[array[i]] = array[i];
+	}
+	int j = 0;
+	int max1 = max + 1;
+	for(i=0;i<max1;i++){
+		if(temp[i] > 0){
+			array[j++] = temp[i];
+		}
+	}
+    }
+}

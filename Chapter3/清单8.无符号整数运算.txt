@@ -1,0 +1,25 @@
+public class UnsignedByte {
+    public short getValue(byte i){//将byte转为无符号的数字
+	short li = (short)(i& 0xff);
+	return li;
+    }
+
+public byte toUnsignedByte(short i){
+	return (byte)(i& 0xff);//将short转为无符号byte
+    }
+
+public static void main(String[] args){
+	UnsignedByte ins = new UnsignedByte();
+	short[] shorts = new short[256];//声明一个short数组
+	for(inti=0;i<shorts.length;i++){//数组不能超过无符号byte的上限
+		shorts[i]=(short)i;
+	}
+	byte[] bytes = new byte[256];//使用byte数组替代short数组
+	for(inti=0;i<bytes.length;i++){
+		bytes[i]=ins.toUnsignedByte(shorts[i]);//short数组的数据存到byte数组中
+	}
+	for(inti=0;i<bytes.length;i++){
+		System.out.println(ins.getValue(bytes[i])+" ");//从byte数组中取出无符号的byte
+	}
+    }
+}

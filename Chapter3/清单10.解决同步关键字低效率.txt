@@ -1,0 +1,11 @@
+public class StaticSingleton {
+privateStaticSingleton(){
+	System.out.println("StaticSingleton is create");
+    }
+private static class SingletonHolder{
+	private static StaticSingleton instance = new StaticSingleton();
+    }
+public static StaticSingletongetInstance(){
+	returnSingletonHolder.instance;
+    }
+}

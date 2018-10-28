@@ -1,0 +1,63 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+
+public class NIOComparator {
+     public void IOMethod(String TPATH){
+    	 long start = System.currentTimeMillis();
+    	 try {
+			DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(new File(TPATH))));
+			for(int i=0;i<4000000;i++){
+				dos.writeInt(i);//写入4000000个整数
+			}
+			if(dos!=null){
+				dos.close();
+			}
+		 } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		 } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+    	 long end = System.currentTimeMillis();
+    	 System.out.println(end - start);
+    	 start = System.currentTimeMillis();
+    	 try {
+			DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(new File(TPATH))));
+			for(int i=0;i<4000000;i++){
+				dis.readInt();
+			}
+			if(dis!=null){
+				dis.close();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	 
+    	 end = System.currentTimeMillis();
+    	 System.out.println(end - start);
+     }
+     
+     public static void main(String[] args){
+    	 NIOComparator nio = new NIOComparator();
+    	 nio.IOMethod("c:\\1.txt");
+    	 nio.ByteMethod("c:\\2.txt");
+    	 nio.ByteMethod("c:\\3.txt");
+     }
+}

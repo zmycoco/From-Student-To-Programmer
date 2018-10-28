@@ -1,0 +1,144 @@
+1.	清单5.Java1的枚举方式处理字符串向量
+Vector names = new Vector();
+names.add("test1");
+names.add("test2");
+Enumeration e = names.elements();
+while (e.hasMoreElements())
+{
+String name = (String) e.nextElement();
+System.out.println(name);
+}
+2.	清单6.Java2的遍历字符串列表
+List names = new LinkedList();
+names.add("test1");
+names.add("test2");
+Iterator i = names.iterator();
+while (i.hasNext())
+{
+String name = (String) i.next();
+System.out.println(name);
+}
+3.	清单7.Java5的for循环方式
+List<String> names = new
+LinkedList<String>();
+names.add("Test1");
+names.add("Test2");
+for (String name : names)
+System.out.println(name);
+4.	清单8.Java8的操作集合方式
+List<String> names = new LinkedList<>();
+names.add("Apple");
+names.add("Orange");
+names.forEach(name->System.out.println(name));
+5.	清单9.Java6方式统计长单词
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+public class Java8CollectionTest {
+	public static void main(String[] args){
+		try {
+            String contents = new String(Files.readAllBytes(
+Paths.get("D:\\Project\\Java8Project\\src\\pom.xml")),
+                    StandardCharsets.UTF_8);
+            List<String> words = Arrays.asList(contents.split("\n")); 
+            //进行迭代
+int count = 0;
+            for(String w: words){
+                if(w.length() > 12) count++;
+            }
+System.out.println(count);
+        } catch (IOException e) {
+e.printStackTrace();
+        }
+    }
+}
+6.	清单10.Java8方式统计长单词
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+public class TestJava8Collection {
+    public static void main(String[] args) {
+        try {
+            String contents = new String(Files.readAllBytes(
+Paths.get("D:\\Project\\Java8Project\\src\\pom.xml")),
+                    StandardCharsets.UTF_8);
+            List<String> words = Arrays.asList(contents.split("\n")); 
+            //编写方式不一样了
+            long count = words.stream().filter(w ->w.length() > 12).count();
+System.out.println(count);
+        } catch (IOException e) {
+e.printStackTrace();
+        }
+    }
+}
+7.	清单11.Java8并行运行统计程序
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+public class TestJava8Collection{
+    public static void main(String[] args) {
+        try {
+            String contents = new String(Files.readAllBytes(
+Paths.get("D:\\Project\\Java8Project\\src\\pom.xml")),
+                    StandardCharsets.UTF_8);
+            List<String> words = Arrays.asList(contents.split("\n")); 
+            //注意这一句，stream()改成了parallelStream()方法
+            long count = words.parallelStream().filter(w ->w.length() > 12).count();
+System.out.println(count);
+        } catch (IOException e) {
+e.printStackTrace();
+        }
+    }
+}
+7.	清单11.Java8并行运行统计程序
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+public class TestJava8Collection{
+    public static void main(String[] args) {
+        try {
+            String contents = new String(Files.readAllBytes(
+Paths.get("D:\\Project\\Java8Project\\src\\pom.xml")),
+                    StandardCharsets.UTF_8);
+            List<String> words = Arrays.asList(contents.split("\n")); 
+            //注意这一句，stream()改成了parallelStream()方法
+            long count = words.parallelStream().filter(w ->w.length() > 12).count();
+System.out.println(count);
+        } catch (IOException e) {
+e.printStackTrace();
+        }
+    }
+}
+8.	清单12.Java8实现统计A打头字母
+List<String> names = new LinkedList<>();
+names.add("Annie");
+names.add("Alice");
+names.add("Bob");
+long count = names.stream()
+.filter(name ->name.startsWith("A").count();
+9.	清单13.Java7实现统计A打头字母
+List<String> names = new LinkedList<>();
+names.add("Annie");
+names.add("Alice");
+names.add("Bob");
+long count = 0;
+for (String name : names){
+if (name.startsWith("A"))
+++count;
+}

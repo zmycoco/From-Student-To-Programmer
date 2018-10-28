@@ -1,0 +1,34 @@
+public class OperationCompare {
+     public static void booleanOperate(){
+	 long start = System.currentTimeMillis();
+	 boolean a = false;
+	 boolean b = true;
+	 int c = 0;
+	 //下面循环开始进行位运算，表达式里面的所有计算因子都会被用来计算
+	 for(int i=0;i<1000000;i++){
+		 if(a&b&"Test_123".contains("123")){
+			 c = 1;
+		 }
+	 }
+	 System.out.println(System.currentTimeMillis() - start);
+     }
+
+     public static void bitOperate(){
+	 long start = System.currentTimeMillis();
+	 boolean a = false;
+	 boolean b = true;
+	 int c = 0;
+	 //下面循环开始进行布尔运算，只计算表达式a即可满足条件
+	 for(int i=0;i<1000000;i++){
+		 if(a&&b&&"Test_123".contains("123")){
+			 c = 1;
+		 }
+	 }
+	 System.out.println(System.currentTimeMillis() - start);
+     }
+
+     public static void main(String[] args){
+	 OperationCompare.booleanOperate();
+	 OperationCompare.bitOperate();
+     }
+}

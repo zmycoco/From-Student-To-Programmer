@@ -1,0 +1,59 @@
+1.	清单1.客户端使用的接口
+/*
+ * 定义客户端使用的接口，与业务相关
+ */
+public interface Target {
+    /*
+     * 客户端请求处理的方法
+     */
+	public void request();
+}
+2.	清单2.被适配的对象
+/*
+ * 已经存在的接口，这个接口需要配置
+ */
+public class Adaptee {
+     /*
+      * 原本存在的方法
+      */
+	public void specificRequest(){
+		//业务代码
+	}
+}
+3.	清单3.适配器实现
+/*
+ * 适配器类
+ */
+public class Adapter implements Target{
+    /*
+     * 持有需要被适配的接口对象
+     */
+	private Adapteeadaptee;
+	/*
+	 * 构造方法，传入需要被适配的对象
+	 * @paramadaptee需要被适配的对象
+	 */
+	public Adapter(Adapteeadaptee){
+		this.adaptee = adaptee;
+	}
+	@Override
+	public void request() {
+		// TODO Auto-generated method stub
+		adaptee.specificRequest();
+	}
+
+}
+4.	清单4.客户端代码
+/*
+ * 使用适配器的客户端
+ */
+public class Client {
+     public static void main(String[] args){
+	 //创建需要被适配的对象
+	Adapteeadaptee = new Adaptee();
+	 //创建客户端需要调用的接口对象
+	 Target target = new Adapter(adaptee);
+	 //请求处理
+	target.request();
+     }
+}

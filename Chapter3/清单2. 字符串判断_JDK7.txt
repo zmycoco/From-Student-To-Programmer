@@ -1,0 +1,20 @@
+public class switchJava7 {
+    public String generate(String name,String gender){
+    	String title = "";
+    	switch(gender) {
+    	    case "男":
+    		    title = name + "先生";
+    		    break;
+    	    case "女":
+    	    	title = name + "女士";
+    	    	break;
+    	    default:
+    	    	title = name;
+    	}
+    	return title;
+}
+public static void main(String[] args){
+    	switchJava7 sj7 = new switchJava7();
+    	System.out.println(sj7.generate("michael", "男"));
+}
+}

@@ -1,0 +1,33 @@
+public class switchJava7
+{
+public String generate(String name,String gender)
+{
+    String title = ¡°¡±;
+    String s = gender;
+    byte byte0 = -1;
+    switch(s.hashCode())
+    {
+       case 30007:
+          if(s.equals(¡°\u7537¡±))
+             byte0 = 0;
+          break;
+       case 22899:
+          if(s.equals(¡°\u5973¡±))
+             byte0 = 0;
+          break;
+     }
+     switch(byte0)
+     {
+       case 0://¡¯\0¡¯
+         title = (new StringBuilder()).append(name).append(¡°\u5148\u751F¡±).toString();
+         break;
+       case 1://¡¯\001¡¯
+         title = (new StringBuilder()).append(name).append(¡°\u5973\u58EB¡±).toString();
+         break;
+       default:
+         title = name;
+         break;
+}
+return title;
+}
+}

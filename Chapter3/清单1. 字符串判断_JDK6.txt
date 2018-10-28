@@ -1,0 +1,20 @@
+public class switchJava6 {
+	public String generate(String name,int gender){
+    	String title = "";
+    	switch(gender) {
+    	    case 1:
+    		    title = name + "先生";
+    		    break;
+    	    case 2:
+    	    	title = name + "女士";
+    	    	break;
+    	    default:
+    	    	title = name;
+    	}
+    	return title;
+    }
+    public static void main(String[] args){
+    	switchJava6 sj6 = new switchJava6();
+    	System.out.println(sj6.generate("michael", 1));
+    }
+}

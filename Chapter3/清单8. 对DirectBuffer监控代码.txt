@@ -1,0 +1,37 @@
+import java.lang.reflect.Field;
+
+
+public class monDirectBuffer {
+      
+	public static void main(String[] args){
+		try {
+			Class c = Class.forName("java.nio.Bits");//通过反射取得私有数据
+			Field maxMemory = c.getDeclaredField("maxMemory");
+			maxMemory.setAccessible(true);
+			Field reservedMemory = c.getDeclaredField("reservedMemory");
+			reservedMemory.setAccessible(true);
+			synchronized(c){
+				Long maxMemoryValue = (Long)maxMemory.get(null);
+				Long reservedMemoryValue = (Long)reservedMemory.get(null);
+				System.out.println("maxMemoryValue="+maxMemoryValue);
+				System.out.println("reservedMemoryValue="+reservedMemoryValue);
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+}

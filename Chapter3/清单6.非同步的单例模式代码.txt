@@ -1,0 +1,30 @@
+public class Singleton implements Runnable{
+private Singleton(){
+	System.out.println("Singleton is create");
+     }
+private static Singleton instance = new Singleton();
+public static Singleton getInsatnce(){
+	return instance;
+     }
+public static void createString(){
+	System.out.println("createString in Singleton");
+     }
+
+     @Override
+	public void run() {
+		// TODO Auto-generated method stub
+	longbeginTime = System.currentTimeMillis();
+		for(inti=0;i<10000;i++){
+			Singleton.getInsatnce();
+		}
+		System.out.println(System.currentTimeMillis() - beginTime);
+	 }
+
+public static void main(String[] args){
+	 //Singleton.createString();
+	for(inti=0;i<5;i++){
+		new Thread(new Singleton()).start();
+	 }
+     }
+	
+}

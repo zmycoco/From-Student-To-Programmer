@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+
+
+public class Split {
+	public String[] split(CharSequence input, int limit) {        
+		int index = 0;        
+		boolean matchLimited = limit > 0;        
+		ArrayList<String> matchList = new ArrayList<String>();        
+		Matcher m = matcher(input);        
+		// Add segments before each match found        
+		while(m.find()) {            
+			if (!matchLimited || matchList.size() < limit - 1) {               
+				String match = input.subSequence(index, m.start()).toString();                
+				matchList.add(match);                
+				index = m.end();            
+			} else if (matchList.size() == limit - 1) { 
+				// last one                
+				String match = input.subSequence(index,input.length()).toString();                
+				matchList.add(match);                
+				index = m.end();            
+			}        
+		}        
+		// If no match was found, return this        
+		if (index == 0){            
+			return new String[] {input.toString()};    
+		}
+		// Add remaining segment        
+		if (!matchLimited || matchList.size() < limit){            
+			matchList.add(input.subSequence(index, input.length()).toString());   
+		}
+		// Construct result        
+		int resultSize = matchList.size();        
+		if (limit == 0){          
+			while (resultSize > 0 && matchList.get(resultSize-1).equals(""))                
+				resultSize--;        
+		    String[] result = new String[resultSize];        
+		    return matchList.subList(0, resultSize).toArray(result);    
+		}
+	}
+	
+	
+}
